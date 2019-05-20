@@ -100,9 +100,15 @@ app.get("/users", function(req, res) {
 // register route
 app.post("/register", function(req, res, next) {
   const { email, fullname, username, password } = req.body;
-  createUser({ email, fullname, username, password }).then(user =>
-    res.json({ user, msg: "account created successfully" })
-  );
+  getUser({ email }).then(user => {
+    if (user) {
+      res.status(401).json({ message: "User Already exsist" });
+    } else {
+      createUser({ email, fullname, username, password }).then(user =>
+        res.json({ user, msg: "account created successfully" })
+      );
+    }
+  });
 });
 
 //login route
