@@ -51,6 +51,12 @@ const getAllUsers = async () => {
   return await User.findAll();
 };
 
+const getUser = async obj => {
+  return await User.findOne({
+    where: obj
+  });
+};
+
 //parse application json
 app.use(bodyParser.json());
 //parse application/x-www-form-urlencoded
@@ -62,6 +68,20 @@ app.get("/", (req, res) => {
   res.json({
     message: "Express is up!"
   });
+});
+
+//get all users
+
+app.get("/users", function(req, res) {
+  getAllUsers().then(user => res.json(user));
+});
+
+//register new user
+app.post("/register", function(req, res, next) {
+  const { email, fullname, username, password } = req.body;
+  createUser({ email, fullname, username, password }).then(user =>
+    res.json({ user, msg: "account created successfully" })
+  );
 });
 
 //start the app
