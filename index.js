@@ -117,7 +117,7 @@ app.post("/login", async function(req, res, next) {
   if (email && password) {
     let user = await getUser({ email });
     if (!user) {
-      res.status(401).json({ message: "No such user found" });
+      res.status(401).json({ msg: "No such user found" });
     }
     if (user.password === password) {
       // from now on we'll identify the user by the id and the id is the
@@ -136,7 +136,9 @@ app.get(
   "/protected",
   passport.authenticate("jwt", { session: false }),
   function(req, res) {
-    res.json("Success! You can now see this without a token.");
+    res
+      .status(200)
+      .json({ msg: "Success! You can now see this without a token." });
   }
 );
 
